@@ -22,4 +22,4 @@ add_subdirectory ("EasyOpengl")
 
 
 
-target_link_libraries(EasyOpengl glfw glew_s opengl32)
+target_link_libraries(EasyOpengl glfw glew_s)

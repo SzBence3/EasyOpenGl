@@ -1,6 +1,6 @@
-prefix=/home/szbence/dev/EasyOpenGl/out/install/claang
+prefix=/home/szbence/dev/EasyOpenGl/EasyOpenGl/out/install/claang
 exec_prefix=${prefix}
-libdir=/home/szbence/dev/EasyOpenGl/out/install/claang/lib
+libdir=/home/szbence/dev/EasyOpenGl/EasyOpenGl/out/install/claang/lib
 includedir=${prefix}/include
 
 Name: glew
