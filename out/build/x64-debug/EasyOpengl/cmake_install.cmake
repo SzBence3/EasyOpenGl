@@ -1,8 +1,8 @@
-# Install script for directory: C:/bence_prog/EasyOpengl/EasyOpengl
+# Install script for directory: C:/Users/HP/source/repos/EasyOpenGl/EasyOpengl
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "C:/bence_prog/EasyOpengl/out/install/x64-debug")
+  set(CMAKE_INSTALL_PREFIX "C:/Users/HP/Source/Repos/EasyOpenGl/out/install/x64-debug")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 

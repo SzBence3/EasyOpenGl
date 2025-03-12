@@ -1,9 +1,9 @@
 
-if (NOT EXISTS "C:/bence_prog/EasyOpengl/out/build/x64-debug/libs/glfw-3.4/install_manifest.txt")
-    message(FATAL_ERROR "Cannot find install manifest: \"C:/bence_prog/EasyOpengl/out/build/x64-debug/libs/glfw-3.4/install_manifest.txt\"")
+if (NOT EXISTS "C:/Users/HP/source/repos/EasyOpenGl/out/build/x64-debug/libs/glfw-3.4/install_manifest.txt")
+    message(FATAL_ERROR "Cannot find install manifest: \"C:/Users/HP/source/repos/EasyOpenGl/out/build/x64-debug/libs/glfw-3.4/install_manifest.txt\"")
 endif()
 
-file(READ "C:/bence_prog/EasyOpengl/out/build/x64-debug/libs/glfw-3.4/install_manifest.txt" files)
+file(READ "C:/Users/HP/source/repos/EasyOpenGl/out/build/x64-debug/libs/glfw-3.4/install_manifest.txt" files)
 string(REGEX REPLACE "\n" ";" files "${files}")
 
 foreach (file ${files})

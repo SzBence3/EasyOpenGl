@@ -1,4 +1,4 @@
-#line 1 "C:\\bence_prog\\EasyOpengl\\libs\\glew-2.1.0\\build\\glew.rc"
+#line 1 "C:\\Users\\HP\\source\\repos\\EasyOpenGl\\libs\\glew-2.1.0\\build\\glew.rc"
 
 #line 1 "C:\\Program Files (x86)\\Windows Kits\\10\\include\\10.0.22621.0\\um\\windows.h"
 #line 1 "C:\\Program Files (x86)\\Windows Kits\\10\\include\\10.0.22621.0\\shared\\winapifamily.h"
@@ -9362,21 +9362,21 @@
 
 #line 276 "C:\\Program Files (x86)\\Windows Kits\\10\\include\\10.0.22621.0\\um\\windows.h"
 
-#line 3 "C:\\bence_prog\\EasyOpengl\\libs\\glew-2.1.0\\build\\glew.rc"
+#line 3 "C:\\Users\\HP\\source\\repos\\EasyOpenGl\\libs\\glew-2.1.0\\build\\glew.rc"
 
 
 
 
 
 
-#line 10 "C:\\bence_prog\\EasyOpengl\\libs\\glew-2.1.0\\build\\glew.rc"
+#line 10 "C:\\Users\\HP\\source\\repos\\EasyOpenGl\\libs\\glew-2.1.0\\build\\glew.rc"
 
 
 
 
 
 
-#line 17 "C:\\bence_prog\\EasyOpengl\\libs\\glew-2.1.0\\build\\glew.rc"
+#line 17 "C:\\Users\\HP\\source\\repos\\EasyOpenGl\\libs\\glew-2.1.0\\build\\glew.rc"
 
 
 
@@ -9390,13 +9390,13 @@ FILEFLAGSMASK 0x0000003FL
 FILEFLAGS 0x00000001L
 
 
-#line 31 "C:\\bence_prog\\EasyOpengl\\libs\\glew-2.1.0\\build\\glew.rc"
+#line 31 "C:\\Users\\HP\\source\\repos\\EasyOpenGl\\libs\\glew-2.1.0\\build\\glew.rc"
 FILEOS 0x00000004L
 
 FILETYPE 0x00000007L
 
 
-#line 37 "C:\\bence_prog\\EasyOpengl\\libs\\glew-2.1.0\\build\\glew.rc"
+#line 37 "C:\\Users\\HP\\source\\repos\\EasyOpenGl\\libs\\glew-2.1.0\\build\\glew.rc"
 FILESUBTYPE 0x00000000L
 BEGIN
     BLOCK "StringFileInfo"

@@ -16,7 +16,7 @@ project ("EasyOpengl")
 # Include sub-projects.
 add_subdirectory ("libs/glfw-3.4")
 add_subdirectory("libs/glew-2.1.0/build/cmake")
-add_subdirectory("libs/glm-master")
+add_subdirectory("libs/glm-1.0.1")
 
 add_subdirectory ("EasyOpengl")
 

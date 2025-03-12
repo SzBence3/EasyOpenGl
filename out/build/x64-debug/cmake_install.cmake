@@ -1,8 +1,8 @@
-# Install script for directory: C:/bence_prog/EasyOpengl
+# Install script for directory: C:/Users/HP/source/repos/EasyOpenGl
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "C:/bence_prog/EasyOpengl/out/install/x64-debug")
+  set(CMAKE_INSTALL_PREFIX "C:/Users/HP/Source/Repos/EasyOpenGl/out/install/x64-debug")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -34,22 +34,22 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("C:/bence_prog/EasyOpengl/out/build/x64-debug/libs/glfw-3.4/cmake_install.cmake")
+  include("C:/Users/HP/source/repos/EasyOpenGl/out/build/x64-debug/libs/glfw-3.4/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("C:/bence_prog/EasyOpengl/out/build/x64-debug/libs/glew-2.1.0/build/cmake/cmake_install.cmake")
+  include("C:/Users/HP/source/repos/EasyOpenGl/out/build/x64-debug/libs/glew-2.1.0/build/cmake/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("C:/bence_prog/EasyOpengl/out/build/x64-debug/libs/glm-master/cmake_install.cmake")
+  include("C:/Users/HP/source/repos/EasyOpenGl/out/build/x64-debug/libs/glm-1.0.1/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("C:/bence_prog/EasyOpengl/out/build/x64-debug/EasyOpengl/cmake_install.cmake")
+  include("C:/Users/HP/source/repos/EasyOpenGl/out/build/x64-debug/EasyOpengl/cmake_install.cmake")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT)
@@ -60,5 +60,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "C:/bence_prog/EasyOpengl/out/build/x64-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "C:/Users/HP/source/repos/EasyOpenGl/out/build/x64-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
