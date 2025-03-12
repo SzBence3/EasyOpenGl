@@ -1,0 +1,284 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1,
+						4,
+						5,
+						7
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.15"
+					},
+					"projectIndex" : 0,
+					"source" : "."
+				},
+				{
+					"build" : "libs/glfw-3.4",
+					"childIndexes" : 
+					[
+						2,
+						3
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-libs.glfw-3.4-Debug-f4fb05e65e1feeb378ce.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.4"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 1,
+					"source" : "libs/glfw-3.4",
+					"targetIndexes" : 
+					[
+						6
+					]
+				},
+				{
+					"build" : "libs/glfw-3.4/src",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-libs.glfw-3.4.src-Debug-071ffc0f4eb1b079dbcb.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.4"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 1,
+					"source" : "libs/glfw-3.4/src",
+					"targetIndexes" : 
+					[
+						4,
+						7
+					]
+				},
+				{
+					"build" : "libs/glfw-3.4/docs",
+					"jsonFile" : "directory-libs.glfw-3.4.docs-Debug-771b9a12ea8502ac710e.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.4"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 1,
+					"source" : "libs/glfw-3.4/docs"
+				},
+				{
+					"build" : "libs/glew-2.1.0/build/cmake",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-libs.glew-2.1.0.build.cmake-Debug-a5cf63f756ddb2c4806d.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "2.8.12"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 2,
+					"source" : "libs/glew-2.1.0/build/cmake",
+					"targetIndexes" : 
+					[
+						1,
+						2,
+						3,
+						8
+					]
+				},
+				{
+					"build" : "libs/glm-1.0.1",
+					"childIndexes" : 
+					[
+						6
+					],
+					"jsonFile" : "directory-libs.glm-1.0.1-Debug-935ad1f35a86b74a3291.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.6"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 3,
+					"source" : "libs/glm-1.0.1"
+				},
+				{
+					"build" : "libs/glm-1.0.1/glm",
+					"jsonFile" : "directory-libs.glm-1.0.1.glm-Debug-074d6e347b1a3965e715.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.6"
+					},
+					"parentIndex" : 5,
+					"projectIndex" : 3,
+					"source" : "libs/glm-1.0.1/glm",
+					"targetIndexes" : 
+					[
+						5
+					]
+				},
+				{
+					"build" : "EasyOpengl",
+					"jsonFile" : "directory-EasyOpengl-Debug-9e352fd2eb1479137db2.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.15"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "EasyOpengl",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"childIndexes" : 
+					[
+						1,
+						2,
+						3
+					],
+					"directoryIndexes" : 
+					[
+						0,
+						7
+					],
+					"name" : "EasyOpengl",
+					"targetIndexes" : 
+					[
+						0
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						1,
+						2,
+						3
+					],
+					"name" : "GLFW",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						4,
+						6,
+						7
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						4
+					],
+					"name" : "glew",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						1,
+						2,
+						3,
+						8
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						5,
+						6
+					],
+					"name" : "glm",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						5
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 7,
+					"id" : "EasyOpengl::@414f7595acdb3583963b",
+					"jsonFile" : "target-EasyOpengl-Debug-32e39018e8f5d87945f5.json",
+					"name" : "EasyOpengl",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 4,
+					"id" : "glew::@717d470b011500e00557",
+					"jsonFile" : "target-glew-Debug-4302e6109731d8351562.json",
+					"name" : "glew",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 4,
+					"id" : "glew_s::@717d470b011500e00557",
+					"jsonFile" : "target-glew_s-Debug-ae040de9f6b12c510420.json",
+					"name" : "glew_s",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 4,
+					"id" : "glewinfo::@717d470b011500e00557",
+					"jsonFile" : "target-glewinfo-Debug-0318f70b8ccf69b3e392.json",
+					"name" : "glewinfo",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "glfw::@ad9a86069fbae5e790e5",
+					"jsonFile" : "target-glfw-Debug-78662cd9d458b187f2cc.json",
+					"name" : "glfw",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 6,
+					"id" : "glm::@93ea875fa143f2ab3fa0",
+					"jsonFile" : "target-glm-Debug-f6a5d221e6ba92d4669c.json",
+					"name" : "glm",
+					"projectIndex" : 3
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "uninstall::@fceba8648df58974f928",
+					"jsonFile" : "target-uninstall-Debug-bb84b94ac50b17787a43.json",
+					"name" : "uninstall",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "update_mappings::@ad9a86069fbae5e790e5",
+					"jsonFile" : "target-update_mappings-Debug-46302d9897ad4348aff4.json",
+					"name" : "update_mappings",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 4,
+					"id" : "visualinfo::@717d470b011500e00557",
+					"jsonFile" : "target-visualinfo-Debug-949c5df084d39acaa1b5.json",
+					"name" : "visualinfo",
+					"projectIndex" : 2
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/szbence/dev/EasyOpenGl/out/build/claang",
+		"source" : "/home/szbence/dev/EasyOpenGl"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 6
+	}
+}
