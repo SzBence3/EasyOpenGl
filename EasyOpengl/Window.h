@@ -71,7 +71,7 @@ namespace eogl {
 				throw std::runtime_error("Error creating event callback!");
 			}
 		}
-		void callEventCallback(int type, void* data);
+		void pushEvent(int type, void* data);
 		void addSurface(Surface* surface, int index);
 		void removeSurface(Surface* surface);
 		void removeAllSurfaces();

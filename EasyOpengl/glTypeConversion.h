@@ -5,40 +5,40 @@
 namespace eogl {
 
 	template<typename T>
-	unsigned int getGlType() {
+	static unsigned int getGlType() {
 		throw std::invalid_argument("there is such type");
 	}
 
 	template<>
-	unsigned int getGlType<float>() {
+	static unsigned int getGlType<float>() {
 		return GL_FLOAT;
 	}
 	template<>
-	unsigned int getGlType<char>() {
+	static unsigned int getGlType<char>() {
 		return GL_BYTE;
 	}
 	template<>
-	unsigned int getGlType<unsigned char>() {
+	static unsigned int getGlType<unsigned char>() {
 		return GL_UNSIGNED_BYTE;
 	}
 	template<>
-	unsigned int getGlType<short>() {
+	static unsigned int getGlType<short>() {
 		return GL_SHORT;
 	}
 	template<>
-	unsigned int getGlType<unsigned short>() {
+	static unsigned int getGlType<unsigned short>() {
 		return GL_UNSIGNED_SHORT;
 	}
 	template<>
-	unsigned int getGlType<int>() {
+	static unsigned int getGlType<int>() {
 		return GL_INT;
 	}
 	template<>
-	unsigned int getGlType<unsigned int>() {
+	static unsigned int getGlType<unsigned int>() {
 		return GL_UNSIGNED_INT;
 	}
 	template<>
-	unsigned int getGlType<double>() {
+	static unsigned int getGlType<double>() {
 		return GL_DOUBLE;
 	}
 }

@@ -41,7 +41,7 @@ namespace eogl {
 	void BaseSurface::setInput(bool input) {
 		this->input = input;
 	}
-	void BaseSurface::callEvent(eventType type, Event* e) {
+	void BaseSurface::pushEvent(eventType type, Event* e) {
 		if (callbacks[type] != nullptr) {
 			callbacks[type]->call(e);
 		}

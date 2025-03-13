@@ -23,4 +23,5 @@ int main()
 	{
 		window->endFrame();
 	}
+	delete window;
 }

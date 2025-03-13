@@ -22,6 +22,6 @@ namespace eogl {
 		}
 		void setPos(glm::vec2 ld, glm::vec2 ru);
 		void setInput(bool input);
-		void callEvent(eventType type, Event* e);
+		void pushEvent(eventType type, Event* e) override;
 	};
 }
