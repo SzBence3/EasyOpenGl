@@ -2,18 +2,25 @@
 
 
 #include <iostream>
-#include "Window.h"
+#include "WindowManager.h"
 
-int main(void)
+int main()
 {
-	eogl::Window window(800,600, "Hello World");
-	window.setClearColor(glm::vec4(0.2f, 0.3f, 0.3f, 1.0f));
-	window.setFullScreen(1);
-	window.setFullScreen(0);
+	eogl::WindowManager windowManager;
+	eogl::Window* window = new eogl::Window(800, 600, "helloworld");
+	window->setClearColor(glm::vec4(0.2, 0.3, 0.3, 1.0));
+	//window->setFullScreen(1);
+	window->setEventCallback(eogl::EOGL_KEY_EVENT, [&window](eogl::Event* e) {
+		eogl::KeyEvent* ke = (eogl::KeyEvent*)e;
+		std::cout << "Key: " << ke->key << " Action: " << ke->action << std::endl;
+		if (ke->key == GLFW_KEY_ESCAPE && ke->action == GLFW_PRESS) {
+			window->setWindowShouldClose();
+		}
+		return 0;
+		});
 	
-
-	while (!window.shouldClose())
+	while (!window->shouldClose())
 	{
-		window.endFrame();
+		window->endFrame();
 	}
 }

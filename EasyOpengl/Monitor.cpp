@@ -3,7 +3,6 @@
 #include "libinit.h"
 
  eogl::Monitor::Monitor(int index) {
-	eogl::addObject();
 	int count;
 	GLFWmonitor** ptr =glfwGetMonitors(&count);
 	if (count < index) {
@@ -12,5 +11,5 @@
 	monitor = ptr[index];
  }
  eogl::Monitor::~Monitor() {
-	 eogl::removeObject();
+	 
  }

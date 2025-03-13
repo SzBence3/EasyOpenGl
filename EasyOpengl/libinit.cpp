@@ -1,5 +1,3 @@
-//#define GLEW_STATIC
-
 #include "libinit.h"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -11,7 +9,7 @@ namespace eogl
 	int OBJECT_COUNT = 0;
 	bool GLEW_INITIALIZED = false;
 
-	void addObject() {
+	void _addObject() {
 		if (OBJECT_COUNT== 0) {
 			if (!glfwInit()) {
 				std::cout << "glfw error" << std::endl;
@@ -20,13 +18,13 @@ namespace eogl
 		}
 		OBJECT_COUNT++;
 	}
-	void removeObject() {
+	void _removeObject() {
 		OBJECT_COUNT--;
 		if (OBJECT_COUNT == 0) {
 			glfwTerminate();
 		}
 	}
-	void glewInit_() {
+	void _glewInit() {
 		if (!GLEW_INITIALIZED) {
 			glewExperimental = GL_TRUE;
 			if (glewInit()) {

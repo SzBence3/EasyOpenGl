@@ -1,7 +1,7 @@
 #pragma once
 namespace eogl{
 
-	void addObject();
-	void removeObject();
-	void glewInit_();
+	void _addObject();
+	void _removeObject();
+	void _glewInit();
 }

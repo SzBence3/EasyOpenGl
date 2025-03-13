@@ -4,11 +4,7 @@
 #include<glm/glm.hpp>
 
 namespace eogl {
-	inline int getMonitorCount() {
-		int count;
-		GLFWmonitor** monitors = glfwGetMonitors(&count);
-		return count;
-	}
+	
 
 	class Monitor {
 		GLFWmonitor* monitor;
@@ -37,5 +33,6 @@ namespace eogl {
 		inline GLFWmonitor* getMonitor() const {
 			return monitor;
 		}
+
 	};
 }

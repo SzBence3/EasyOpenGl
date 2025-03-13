@@ -10,18 +10,21 @@ namespace eogl{
 
 	template<class T>
 	class EventCallbackt : public EventCallback{
-		T func;
+		T* func;
 	public:
-		EventCallbackt(T func) {
+		EventCallbackt(T* func) {
 			this->func = func;
 		}
+		EventCallbackt(const T& func) {
+			this->func = (T*) & func;
+		}	
 		virtual bool call(Event* event) override{
-			return func(event);
+			return func->operator()(event);
 		}
 	};
 
 	template<class T>
-	EventCallback* createEventCallback(T func) {
+	EventCallback* createEventCallback(const T &func) {
 		return new EventCallbackt<T>(func);
 	}
 }

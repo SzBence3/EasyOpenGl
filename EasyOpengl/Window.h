@@ -2,23 +2,33 @@
 
 #include <GLFW/glfw3.h>
 #include<glm/glm.hpp>
-#include"Monitor.h"
 #include <string>
+#include<stdexcept>
+#include<vector>
+
+
+#include"Monitor.h"
 #include "EventCallback.h"
+#include "Surface.h"
 
 //EasyOpenGL namespace
 namespace eogl {
+	extern bool isWindowManager;
 	class Window {
-		GLFWwindow* window;
-		void setAsCurrent();
+		friend class WindowManager;
 		
+		GLFWwindow* window;
+		EventCallback* eventCallback[EOGL_EVENT_COUNT] = { nullptr };
+		std::vector<Surface*> surfaces;
+
+		void setAsCurrent();
+		void setEventCallbacks();
 	public:
 
 		Window(int width, int height, std::string title);
 		Window(const Monitor& monitor, bool isFullScreen, std::string title);
 		~Window();
 		void endFrame();
-		
 		void setClearColor(glm::vec4 color);
 		inline glm::vec2 getSize() {
 			int width, height;
@@ -51,15 +61,20 @@ namespace eogl {
 			return glm::vec2(x, y);
 		}
 		void setFullScreen(bool b);
-
-		/*template<class T> void setEventCallback(T func) {
-			if (eventCallback) {
-				delete eventCallback;
+		template<class T> void setEventCallback(int type,const T& func) {
+			if (eventCallback[type]) {
+				delete eventCallback[type];
+				eventCallback[type] = nullptr; // Ensure it is set to nullptr after deletion
 			}
-			eventCallback = createEventCallback(func);
+			eventCallback[type] = createEventCallback(func);
+			if (!eventCallback[type]) {
+				throw std::runtime_error("Error creating event callback!");
+			}
 		}
-		*/
-		
+		void callEventCallback(int type, void* data);
+		void addSurface(Surface* surface, int index);
+		void removeSurface(Surface* surface);
+		void removeAllSurfaces();
 	};
 
 }

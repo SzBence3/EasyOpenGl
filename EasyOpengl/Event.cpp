@@ -30,4 +30,12 @@ namespace eogl {
 		this->codepoint = codepoint;
 		type = EOGL_CHAR_EVENT;
 	}
+	MonitorEvent::MonitorEvent(int event) {
+		this->event = event;
+		type = EOGL_MONITOR_EVENT;
+	}
+	WindowPosEvent::WindowPosEvent(glm::vec2 pos) {
+		this->pos = pos;
+		type = EOGL_WINDOW_POS_EVENT;
+	}
 }
