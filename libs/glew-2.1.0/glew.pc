@@ -1,11 +1,11 @@
-prefix=C:/bence_prog/vscodeEOGL/EasyOpenGl/out/install/x64-release
+prefix=/home/szbence/dev/EasyOpenGl/EasyOpenGl/out/install/claang
 exec_prefix=${prefix}
-libdir=C:/bence_prog/vscodeEOGL/EasyOpenGl/out/install/x64-release/lib
+libdir=/home/szbence/dev/EasyOpenGl/EasyOpenGl/out/install/claang/lib
 includedir=${prefix}/include
 
 Name: glew
 Description: The OpenGL Extension Wrangler library
 Version: 2.1.0
 Cflags: -I${includedir} 
-Libs: -L${libdir} -lglew32
+Libs: -L${libdir} -lGLEW
 Requires: glu

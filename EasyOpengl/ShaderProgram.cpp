@@ -6,6 +6,9 @@
 #include<iostream>
 #include<stdexcept>
 namespace eogl {
+	std::unordered_map<std::string, ShaderProgram*> ShaderProgram::shaderCache;
+	bool ShaderProgram::isDefaultShadersAdded = 0;
+
 	unsigned int ShaderProgram::compileShader(unsigned int type, std::string source)
 	{
 		unsigned int s_id;
@@ -42,22 +45,35 @@ namespace eogl {
 		return cache[name] = res;
 	}
 
-	ShaderProgram::ShaderProgram(std::string vspath, std::string fspath) {
-		init(vspath, fspath, 1, "");
+	void ShaderProgram::addShaderPack(std::string name, std::string vspath, std::string fspath, std::string gspath, bool isPath)
+	{
+		shaderCache["@"+name] = new ShaderProgram(vspath, fspath, gspath, isPath);
+	}
+	void ShaderProgram::addDefaultShaders()
+	{
+		if(isDefaultShadersAdded) return;
+		isDefaultShadersAdded = 1;
+		addShaderPack("2dmultiTexture", "shaders/2dMultiTexture.vs", "shaders/multiTexture.fs", "", 1);
+
 	}
 
-	ShaderProgram::ShaderProgram(std::string vspath, std::string fspath, bool isPath) {
-		init(vspath, fspath, isPath, "");
+	ShaderProgram::ShaderProgram(std::string shaderPack)
+	{
+		if(shaderCache.count("@"+shaderPack)) {
+			*this = *shaderCache["@"+shaderPack];
+			return;
+		}
 	}
 
-	ShaderProgram::ShaderProgram(std::string vspath, std::string fspath, std::string gspath) {
-		init(vspath, fspath, 1, gspath);
+	ShaderProgram::ShaderProgram(std::string vspath, std::string fspath, bool isPath = 1) {
+		init(vspath, fspath, "", isPath);
 	}
 
-	ShaderProgram::ShaderProgram(std::string vspath, std::string fspath, bool isPath = true, std::string gspath = "") {
-		init(vspath, fspath, isPath, gspath);
+	ShaderProgram::ShaderProgram(std::string vspath, std::string fspath, std::string gspath, bool isPath = 1) {
+		init(vspath, fspath, gspath, isPath);
 	}
-	void ShaderProgram::init(std::string vspath, std::string fspath, bool isPath = true, std::string gspath = "")
+
+	void ShaderProgram::init(std::string vspath, std::string fspath, std::string gspath, bool isPath = true)
 	{
 		std::string vs, fs, gs;
 		if (isPath) {
@@ -96,8 +112,8 @@ namespace eogl {
 			fs = fspath;
 			gs = gspath;
 		}
-
-		GlCall(id = glCreateProgram());
+		
+		id = glCreateProgram();
 		unsigned int vsid = compileShader(GL_VERTEX_SHADER, vs), fsid = compileShader(GL_FRAGMENT_SHADER, fs);
 		
 		GlCall(glAttachShader(id, vsid));

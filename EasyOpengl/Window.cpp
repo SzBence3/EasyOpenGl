@@ -14,7 +14,7 @@
 
 namespace eogl {
 	void Window::setEventCallbacks() {
-		glfwSetWindowUserPointer(window, this);
+		setAsCurrent();
 		glfwSetKeyCallback(window, [](GLFWwindow* window, int key, int scancode, int action, int mods) {
 				Window* win = windowManager->getWindow(window);
 				KeyEvent event(key, scancode, action, mods);
@@ -48,7 +48,7 @@ namespace eogl {
 		if (!isWindowManager)
 			throw std::logic_error("WindowManager not initialized!");
 		windowManager->addWindow(this);
-		
+		_glewInit();
 	}
 
 	Window::Window(int width, int height, std::string title) 
@@ -56,7 +56,17 @@ namespace eogl {
 	{
 		if (!isWindowManager)
 			throw std::runtime_error("WindowManager not initialized!");
+
+		glfwWindowHint(GLFW_VERSION_MAJOR, 4);
+		glfwWindowHint(GLFW_VERSION_MINOR, 5);
+		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
 		window = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
+
+		if (!window) {
+			glfwTerminate();
+			throw std::runtime_error("Error creating window!");
+		}
 		setAsCurrent();
 		setEventCallbacks();
 	}
@@ -66,6 +76,10 @@ namespace eogl {
 		if(!isWindowManager)
 			throw std::runtime_error("WindowManager not initialized!");
 		GLFWmonitor* mon = monitor.getMonitor();
+		glfwWindowHint(GLFW_VERSION_MAJOR, 4);
+		glfwWindowHint(GLFW_VERSION_MINOR, 5);
+		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
 		if (isFullScreen) {
 			const GLFWvidmode* mode = glfwGetVideoMode(mon);
 			window = glfwCreateWindow(mode->width, mode->height, title.c_str(), mon, nullptr);
