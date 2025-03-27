@@ -5,7 +5,8 @@ namespace eogl {
 
 	class WindowManager{
 		std::vector<Window*>windows;
-	public:
+		GLFWwindow* offscreen_context;
+		public:
 		WindowManager();
 		~WindowManager();
 		void addWindow(Window* window);
@@ -13,6 +14,7 @@ namespace eogl {
 		int getMonitorCount();
 		Monitor getIthMonitor(int i);
 		Window* getWindow(GLFWwindow* window);
+		inline GLFWwindow* getOffscreenContext() { return offscreen_context; }
 	};
 	extern WindowManager* windowManager;
 }

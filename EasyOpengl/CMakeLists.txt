@@ -3,11 +3,24 @@
 #
 
 # Add source to this project's executable.
-add_executable (EasyOpengl "EasyOpengl.cpp" 
- ${CMAKE_SOURCE_DIR}/libs/stb_image/stb_image.cpp
- "Window.cpp" "Monitor.h" "Monitor.cpp" "libinit.h" "libinit.cpp" "Event.h" "Event.cpp" 
- "EventCallback.cpp" "WindowManager.cpp" "Surface.h" "Surface.cpp" "BaseSurface.h" "BaseSurface.cpp"
- "Texture.cpp" "Debug.cpp""Texture.h" "Debug.h" "VertexArray.cpp" "ShaderProgram.cpp"
+add_executable (EasyOpengl EasyOpengl.cpp 
+ 	${CMAKE_SOURCE_DIR}/libs/stb_image/stb_image.cpp
+ 	Window.cpp 
+ 	Monitor.h Monitor.cpp 
+	libinit.h libinit.cpp 
+	Event.h Event.cpp 
+ 	EventCallback.cpp 
+	WindowManager.cpp 
+	Surface.h Surface.cpp 
+	BaseSurface.h BaseSurface.cpp
+ 	Texture.cpp 
+	Debug.cpp 
+	Texture.h 
+	Debug.h 
+	VertexArray.cpp 
+	ShaderProgram.cpp 
+	ImageSurface.cpp
+ 	IndexBuffer.cpp
 )
 
  target_include_directories(EasyOpengl 

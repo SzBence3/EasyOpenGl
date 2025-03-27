@@ -9,7 +9,7 @@ namespace eogl {
 		unsigned char* localBuffer;
 		int width, height, bpp;
 	public:
-		Texture(std::string path, bool isGamma);
+		Texture(std::string path, bool isGamma = false);
 		~Texture();
 
 		void bind(int slot =0) const;

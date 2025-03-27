@@ -7,8 +7,7 @@
 #include"WindowManager.h"
 #include"libinit.h"
 #include "Event.h"
-#include "Vertex.h"
-#include "VertexArray.h"
+#include "Debug.h"
 
 #define EOGL_TEXTURE_SLOTS 16
 
@@ -49,20 +48,45 @@ namespace eogl {
 			throw std::logic_error("WindowManager not initialized!");
 		windowManager->addWindow(this);
 		_glewInit();
+
+		std::vector<int> indices(6*EOGL_TEXTURE_SLOTS);
+		for(int i = 0; i < EOGL_TEXTURE_SLOTS; i++) {
+			indices[i*6] = 0+i*4;
+			indices[i*6+1] = 1+i*4;
+			indices[i*6+2] = 2+i*4;
+			indices[i*6+3] = 0+i*4;
+			indices[i*6+4] = 2+i*4;
+			indices[i*6+5] = 3+i*4;
+		}
+		ibo.subData(0, indices.size(), indices.data());
+
+		Layout layout;
+		layout.pushLayer<float>(2);
+		layout.pushLayer<float>(2);
+		layout.pushLayer<int>(1);
+
+		vao.setLayout(layout);
 	}
 
+	struct vertex{
+		glm::vec2 pos;
+		glm::vec2 texCoord;
+		int texIndex;
+	};
+
 	Window::Window(int width, int height, std::string title) 
-		: window(nullptr)
+		: window(nullptr), shader("multiTexture"), vao(4*5*4*EOGL_TEXTURE_SLOTS), ibo(6*EOGL_TEXTURE_SLOTS)
 	{
 		if (!isWindowManager)
 			throw std::runtime_error("WindowManager not initialized!");
 
-		glfwWindowHint(GLFW_VERSION_MAJOR, 4);
-		glfwWindowHint(GLFW_VERSION_MINOR, 5);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+		glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE);
+		glfwWindowHint(GLFW_CONTEXT_CREATION_API , GLFW_NATIVE_CONTEXT_API);
 
-		window = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
-
+		window = glfwCreateWindow(width, height, title.c_str(), nullptr, windowManager->getOffscreenContext());
 		if (!window) {
 			glfwTerminate();
 			throw std::runtime_error("Error creating window!");
@@ -70,8 +94,9 @@ namespace eogl {
 		setAsCurrent();
 		setEventCallbacks();
 	}
+	
 	Window::Window(const Monitor& monitor, bool isFullScreen, std::string title)
-		: window(nullptr)
+		: window(nullptr), shader("multiTexture"), vao(4*sizeof(vertex)*EOGL_TEXTURE_SLOTS), ibo(6*EOGL_TEXTURE_SLOTS)
 	{
 		if(!isWindowManager)
 			throw std::runtime_error("WindowManager not initialized!");
@@ -79,14 +104,16 @@ namespace eogl {
 		glfwWindowHint(GLFW_VERSION_MAJOR, 4);
 		glfwWindowHint(GLFW_VERSION_MINOR, 5);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+		glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE);
+		glfwWindowHint(GLFW_CONTEXT_CREATION_API , GLFW_NATIVE_CONTEXT_API);
 
 		if (isFullScreen) {
 			const GLFWvidmode* mode = glfwGetVideoMode(mon);
-			window = glfwCreateWindow(mode->width, mode->height, title.c_str(), mon, nullptr);
+			window = glfwCreateWindow(mode->width, mode->height, title.c_str(), mon, windowManager->getOffscreenContext());
 		}
 		else {
 			auto size = monitor.getSize();
-			window = glfwCreateWindow(size.x, size.y-40, title.c_str(), nullptr, nullptr);
+			window = glfwCreateWindow(size.x, size.y-40, title.c_str(), nullptr, windowManager->getOffscreenContext());
 			setPosition(monitor.getPos()+glm::vec2(0,40));
 		}
 		if (!window) {
@@ -103,35 +130,32 @@ namespace eogl {
 		}
 		glfwDestroyWindow(window);
 	}
+	
 	void Window::endFrame() {
 		glfwMakeContextCurrent(window);
 
 		for(int i = 0; i < surfaces.size(); i+= EOGL_TEXTURE_SLOTS) {
-			
-			std::vector<std::pair<glm::vec2, glm::vec2>> vbo(4*std::min(EOGL_TEXTURE_SLOTS, (int)surfaces.size()-i));
+
+			std::vector<vertex> vbo(4*std::min(EOGL_TEXTURE_SLOTS, (int)surfaces.size()-i));
 			std::vector<int> ibo(6 * std::min(EOGL_TEXTURE_SLOTS, (int)surfaces.size() - i));
 			
 			for (int j = 0; j < std::min(EOGL_TEXTURE_SLOTS, (int)surfaces.size() - i); j++) {
-				vbo[j*4] = {surfaces[i + j]->getPosition(getSize()).first, glm::vec2(0,0)};
-				vbo[j*4+1] = {vbo[j*4].first + glm::vec2(0.0f,surfaces[i + j]->getSize().y), glm::vec2(0,1)};
-				vbo[j*4+2] = {vbo[j*4].first + surfaces[i + j]->getSize(), glm::vec2(1,1)};
-				vbo[j*4+3] = {vbo[j*4].first + glm::vec2(surfaces[i + j]->getSize().x,0.0f), glm::vec2(1,0)};
+				vbo[j*4] = {surfaces[i + j]->getPos(getSize()), glm::vec2(0,0), j};
+				vbo[j*4+1] = {vbo[j*4].pos + glm::vec2(0.0f,surfaces[i + j]->getSize(getSize()).y), glm::vec2(0,1), j};
+				vbo[j*4+2] = {vbo[j*4].pos + surfaces[i + j]->getSize(getSize()), glm::vec2(1,1)};
+				vbo[j*4+3] = {vbo[j*4].pos + glm::vec2(surfaces[i + j]->getSize(getSize()).x,0.0f), glm::vec2(1,0), j};
 				surfaces[i + j]->bindTexture(j);
 				
-				//Index buffer				
-				ibo[j*6] = 0+j*4;
-				ibo[j*6+1] = 1+j*4;
-				ibo[j*6+2] = 2+j*4;
-				ibo[j*6+3] = 0+j*4;
-				ibo[j*6+4] = 2+j*4;
-				ibo[j*6+5] = 3+j*4;
 			}
-			Layout layout;
-			layout.pushLayer<float>(2);
-			layout.pushLayer<float>(2);
-			VertexArray vao(vbo.size(),layout, vbo.data());
-			vao.bind();
 			
+			vao.subData(0, vbo.size()*sizeof(vertex), vbo.data());
+			vao.bind();
+			this->ibo.bind();
+			shader.unBind();
+
+			setAsCurrent();
+
+			GlCall(glDrawElements(GL_TRIANGLES, ibo.size(), GL_UNSIGNED_INT, nullptr));
 		}
 		glClear(GL_COLOR_BUFFER_BIT);
 		glfwSwapBuffers(window);
@@ -160,7 +184,7 @@ namespace eogl {
 			eventCallback[type]->call((Event*)data);
 		}
 	}
-	void Window::addSurface(Surface* surface, int index = -1) {
+	void Window::addSurface(Surface* surface, int index) {
 		if (index == -1) {
 			surfaces.push_back(surface);
 		}

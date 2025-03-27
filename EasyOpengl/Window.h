@@ -1,15 +1,18 @@
 #pragma once
 
+#include "VertexArray.h"
+#include "ShaderProgram.h"
+#include"Monitor.h"
+#include "EventCallback.h"
+#include "Surface.h"
+#include "IndexBuffer.h"
+
+
 #include <GLFW/glfw3.h>
 #include<glm/glm.hpp>
 #include <string>
 #include<stdexcept>
 #include<vector>
-
-
-#include"Monitor.h"
-#include "EventCallback.h"
-#include "Surface.h"
 
 //EasyOpenGL namespace
 namespace eogl {
@@ -20,6 +23,10 @@ namespace eogl {
 		GLFWwindow* window;
 		EventCallback* eventCallback[EOGL_EVENT_COUNT] = { nullptr };
 		std::vector<Surface*> surfaces;
+
+		ShaderProgram shader;
+		VertexArray vao;
+		IndexBuffer ibo;
 
 		void setAsCurrent();
 		void setEventCallbacks();
@@ -72,7 +79,7 @@ namespace eogl {
 			}
 		}
 		void pushEvent(int type, void* data);
-		void addSurface(Surface* surface, int index);
+		void addSurface(Surface* surface, int index = -1);
 		void removeSurface(Surface* surface);
 		void removeAllSurfaces();
 	};

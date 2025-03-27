@@ -3,6 +3,7 @@
 class IndexBuffer {
 	unsigned int ibo, size;
 public:
+	//size is not in bytes but in number of indices
 	IndexBuffer(int size, void* data = nullptr);
 	~IndexBuffer();
 	void bind() const;

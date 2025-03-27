@@ -11,10 +11,9 @@ namespace eogl {
 		~Surface();
 		virtual void Render();
 		virtual void bindTexture(int index);
-		virtual std::pair<glm::vec2, glm::vec2> getPosition(glm::vec2 screenSize);
 		virtual bool haveInput();
 		virtual void pushEvent(eventType type, Event* e);
-		virtual glm::vec2 getSize();
-		virtual glm::vec2 getPos();
+		virtual glm::vec2 getSize(glm::vec2 screenSize);
+		virtual glm::vec2 getPos(glm::vec2 screenSize);
 	};
 }

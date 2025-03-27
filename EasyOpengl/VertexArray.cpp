@@ -2,6 +2,7 @@
 #include<GL/glew.h>
 #include<GLFW/glfw3.h>
 #include"Debug.h"
+#include"WindowManager.h"
 
 namespace eogl{
 	VertexArray::VertexArray(unsigned int size, Layout layout, void* data ) :size(size)
@@ -36,12 +37,13 @@ namespace eogl{
 	}
 	void VertexArray::bind() const
 	{
-		glBindVertexArray(vao);
+		//glfwMakeContextCurrent(windowManager->getOffscreenContext());
+		GlCall(glBindVertexArray(vao));
 	}
 	void VertexArray::unBind() const {
 		glBindVertexArray(0);
 	}
-	void VertexArray::subData(unsigned int offset, unsigned int size, void* data) {GL_INVALID_VALUE;
+	void VertexArray::subData(unsigned int offset, unsigned int size, void* data) {
 		bind();
 		GlCall(glBufferSubData(GL_ARRAY_BUFFER, offset, size, data));
 	}

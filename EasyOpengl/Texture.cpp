@@ -4,12 +4,17 @@
 #include"Debug.h"
 
 namespace eogl {
-	Texture::Texture(std::string path, bool isGamma = false)
+	//Only .jpg files are supported yet
+	Texture::Texture(std::string path, bool isGamma)
 		: filePath(path), localBuffer(nullptr), width(0), height(0), bpp(0)
 	{
 		stbi_set_flip_vertically_on_load(1);
 		localBuffer = stbi_load(filePath.c_str(), &width, &height, &bpp, 4);
-		ASSERT(localBuffer);// invalid file
+		
+		if(!localBuffer){
+			throw std::runtime_error("Failed to load texture: " + filePath);
+		}
+
 		GlCall(glGenTextures(1, &renderId));
 		GlCall(glBindTexture(GL_TEXTURE_2D, renderId));
 		

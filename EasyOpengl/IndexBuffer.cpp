@@ -3,11 +3,11 @@
 #include "Debug.h"
 #include<iostream>
 
-IndexBuffer::IndexBuffer(int size, void* data) : size(size/4)
+IndexBuffer::IndexBuffer(int size, void* data) : size(size)
 {
 	GlCall(glGenBuffers(1, &ibo));
 	GlCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo));
-	GlCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, data, GL_STATIC_DRAW));
+	GlCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, size*4, data, GL_STATIC_DRAW));
 }
 IndexBuffer::~IndexBuffer() {
 	glDeleteBuffers(1, &ibo);
@@ -21,5 +21,5 @@ void IndexBuffer::unBind() const {
 }
 void IndexBuffer::subData(unsigned int offset, unsigned int size, void* data) {
 	bind();
-	GlCall(glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, offset, size, data));
+	GlCall(glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, offset*4, size*4, data));
 }
