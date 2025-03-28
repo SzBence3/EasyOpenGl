@@ -53,7 +53,7 @@ namespace eogl {
 	{
 		if(isDefaultShadersAdded) return;
 		isDefaultShadersAdded = 1;
-		addShaderPack("2dmultiTexture", "shaders/2dMultiTexture.vs", "shaders/multiTexture.fs", "", 1);
+		addShaderPack("2dmultiTexture", "shaders/2dMultiTexture.vert", "shaders/multiTexture.fs", "", 1);
 
 	}
 

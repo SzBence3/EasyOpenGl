@@ -21,6 +21,7 @@ add_executable (EasyOpengl EasyOpengl.cpp
 	ShaderProgram.cpp 
 	ImageSurface.cpp
  	IndexBuffer.cpp
+		config.h
 )
 
  target_include_directories(EasyOpengl 

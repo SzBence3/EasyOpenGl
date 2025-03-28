@@ -28,15 +28,15 @@ namespace eogl {
 		VertexArray vao;
 		IndexBuffer ibo;
 
-		void setAsCurrent();
+		void setAsCurrent() const;
 		void setEventCallbacks();
 	public:
 
-		Window(int width, int height, std::string title);
-		Window(const Monitor& monitor, bool isFullScreen, std::string title);
+		Window(int width, int height, const std::string &title);
+		Window(const Monitor& monitor, bool isFullScreen, const std::string &title);
 		~Window();
 		void endFrame();
-		void setClearColor(glm::vec4 color);
+		void setClearColor(glm::vec4 color) const;
 		inline glm::vec2 getSize() {
 			int width, height;
 			glfwGetWindowSize(window, &width, &height);
@@ -78,7 +78,7 @@ namespace eogl {
 				throw std::runtime_error("Error creating event callback!");
 			}
 		}
-		void pushEvent(int type, void* data);
+		void pushEvent(int type, void* data) const;
 		void addSurface(Surface* surface, int index = -1);
 		void removeSurface(Surface* surface);
 		void removeAllSurfaces();

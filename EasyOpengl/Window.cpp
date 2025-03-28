@@ -8,6 +8,7 @@
 #include"libinit.h"
 #include "Event.h"
 #include "Debug.h"
+#include "config.h"
 
 #define EOGL_TEXTURE_SLOTS 16
 
@@ -44,10 +45,75 @@ namespace eogl {
 			WindowResizeEvent event(glm::vec2(width, height));
 			win->pushEvent(EOGL_WINDOW_RESIZE_EVENT, &event);
 			});
+
 		if (!isWindowManager)
 			throw std::logic_error("WindowManager not initialized!");
 		windowManager->addWindow(this);
 		_glewInit();
+		setAsCurrent();
+		glDebugMessageCallback(
+			[](GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
+				std::cout << "GL ERROR: ";
+				switch (severity) {
+					case GL_DEBUG_SEVERITY_HIGH:
+						std::cout  << message << std::endl;
+						break;
+					case GL_DEBUG_SEVERITY_MEDIUM:
+						std::cout << message << std::endl;
+						break;
+					case GL_DEBUG_SEVERITY_LOW:
+						std::cout << message << std::endl;
+						break;
+					default:
+						break;
+				}
+				std::cout << "Source: ";
+				switch (source) {
+					case GL_DEBUG_SOURCE_API:
+						std::cout << "API";
+						break;
+					case GL_DEBUG_SOURCE_WINDOW_SYSTEM:
+						std::cout << "WINDOW SYSTEM";
+						break;
+					case GL_DEBUG_SOURCE_SHADER_COMPILER:
+						std::cout << "SHADER COMPILER";
+						break;
+					case GL_DEBUG_SOURCE_THIRD_PARTY:
+						std::cout << "THIRD PARTY";
+						break;
+					case GL_DEBUG_SOURCE_APPLICATION:
+						std::cout << "APPLICATION";
+						break;
+					default:
+						std::cout << "UNKNOWN";
+						break;
+				}
+				std::cout << " Type: ";
+				switch (type) {
+					case GL_DEBUG_TYPE_ERROR:
+						std::cout << "ERROR";
+						break;
+					case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
+						std::cout << "DEPRECATED BEHAVIOR";
+						break;
+					case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
+						std::cout << "UNDEFINED BEHAVIOR";
+						break;
+					case GL_DEBUG_TYPE_PORTABILITY:
+						std::cout << "PORTABILITY";
+						break;
+					case GL_DEBUG_TYPE_PERFORMANCE:
+						std::cout << "PERFORMANCE";
+						break;
+					default:
+						std::cout << "UNKNOWN";
+						break;
+				}
+				std::cout << std::endl;
+				1;
+		},
+			nullptr
+		);
 
 		std::vector<int> indices(6*EOGL_TEXTURE_SLOTS);
 		for(int i = 0; i < EOGL_TEXTURE_SLOTS; i++) {
@@ -74,7 +140,7 @@ namespace eogl {
 		int texIndex;
 	};
 
-	Window::Window(int width, int height, std::string title) 
+	Window::Window(const int width, const int height, const std::string &title)
 		: window(nullptr), shader("multiTexture"), vao(4*5*4*EOGL_TEXTURE_SLOTS), ibo(6*EOGL_TEXTURE_SLOTS)
 	{
 		if (!isWindowManager)
@@ -85,6 +151,9 @@ namespace eogl {
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 		glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE);
 		glfwWindowHint(GLFW_CONTEXT_CREATION_API , GLFW_NATIVE_CONTEXT_API);
+#ifdef EOGL_DEBUG
+		glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
+#endif
 
 		window = glfwCreateWindow(width, height, title.c_str(), nullptr, windowManager->getOffscreenContext());
 		if (!window) {
@@ -95,7 +164,7 @@ namespace eogl {
 		setEventCallbacks();
 	}
 	
-	Window::Window(const Monitor& monitor, bool isFullScreen, std::string title)
+	Window::Window(const Monitor& monitor, const bool isFullScreen, const std::string &title)
 		: window(nullptr), shader("multiTexture"), vao(4*sizeof(vertex)*EOGL_TEXTURE_SLOTS), ibo(6*EOGL_TEXTURE_SLOTS)
 	{
 		if(!isWindowManager)
@@ -106,7 +175,9 @@ namespace eogl {
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 		glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE);
 		glfwWindowHint(GLFW_CONTEXT_CREATION_API , GLFW_NATIVE_CONTEXT_API);
-
+#ifdef EOGL_DEBUG
+		glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
+#endif
 		if (isFullScreen) {
 			const GLFWvidmode* mode = glfwGetVideoMode(mon);
 			window = glfwCreateWindow(mode->width, mode->height, title.c_str(), mon, windowManager->getOffscreenContext());
@@ -161,14 +232,14 @@ namespace eogl {
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
-	void Window::setClearColor(glm::vec4 color) {
+	void Window::setClearColor(glm::vec4 color) const {
 		setAsCurrent();
 		glClearColor(color.r, color.g, color.b, color.a);
 	}
-	void Window::setAsCurrent() {
+	void Window::setAsCurrent() const {
 		glfwMakeContextCurrent(window);
 	}
-	void Window::setFullScreen(bool b){
+	void Window::setFullScreen(const bool b){
 		if (b) {
 			GLFWmonitor* mon = glfwGetPrimaryMonitor();
 			const GLFWvidmode* mode = glfwGetVideoMode(mon);
@@ -179,7 +250,7 @@ namespace eogl {
 			setPosition(glm::vec2(100, 100));
 		}
 	}
-	void Window::pushEvent(int type, void* data) {
+	void Window::pushEvent(int type, void *data) const {
 		if (eventCallback[type]) {
 			eventCallback[type]->call((Event*)data);
 		}
