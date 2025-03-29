@@ -5,24 +5,33 @@
 #include"glTypeConversion.h"
 
 namespace eogl {
-
-	struct Layer {
-		unsigned int size, count;
-		unsigned int type;
-		bool normalized;
-	};
-
-	class Layout {
-	private:
-		std::vector<Layer>layers;
+	class Layout{
+		class Layer{
+			friend class Layout;
+			unsigned char count;
+			unsigned short size;
+			bool normalized;
+			unsigned int divisor;
+			unsigned int type;
+			int bufferIndex;
+		};
+		std::vector<Layer> layers;
 	public:
-		Layout() {};
-		~Layout() {};
-		template<typename T>
-		void pushLayer(unsigned int count, bool normalized = 0) {
-			layers.push_back(Layer{ (unsigned int)sizeof(T) * count, count, getGlType<T>(), normalized});
-		}
-		const std::vector<Layer>& getLayers() const { return layers; };
-	};
+		Layout() = default;
 
+		template<typename T>  void pushLayer(int count,unsigned int bufferIndex = 0, int divisor = 0, bool normalized = false) {
+			layers.push_back(newLayer<T>(count, bufferIndex, divisor, normalized));
+		}
+		
+		template<typename T>  static Layer newLayer(int count,unsigned int bufferIndex = 0, int divisor = 0, bool normalized = false) {
+			Layer layer;
+			layer.count = count;
+			layer.divisor = divisor;
+			layer.normalized = normalized;
+			layer.size = count * sizeof(T);
+			layer.type = getGlType<T>();
+			layer.bufferIndex = bufferIndex;
+			return layer;
+		}
+	};
 }

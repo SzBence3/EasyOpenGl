@@ -126,12 +126,12 @@ namespace eogl {
 		}
 		ibo.subData(0, indices.size(), indices.data());
 
-		Layout layout;
+		/*Layout layout;
 		layout.pushLayer<float>(2);
 		layout.pushLayer<float>(2);
 		layout.pushLayer<int>(1);
 
-		vao.setLayout(layout);
+		vao.setLayout(layout);*/
 	}
 
 	struct vertex{
@@ -141,7 +141,9 @@ namespace eogl {
 	};
 
 	Window::Window(const int width, const int height, const std::string &title)
-		: window(nullptr), shader("multiTexture"), vao(4*5*4*EOGL_TEXTURE_SLOTS), ibo(6*EOGL_TEXTURE_SLOTS)
+		: window(nullptr), shader("multiTexture"), 
+		vao(4*5*4*EOGL_TEXTURE_SLOTS, Layout({newLayer<float>(2), newLayer<float>(2), newLayer<int>(2)})),
+		ibo(6*EOGL_TEXTURE_SLOTS)
 	{
 		if (!isWindowManager)
 			throw std::runtime_error("WindowManager not initialized!");
@@ -165,7 +167,9 @@ namespace eogl {
 	}
 	
 	Window::Window(const Monitor& monitor, const bool isFullScreen, const std::string &title)
-		: window(nullptr), shader("multiTexture"), vao(4*sizeof(vertex)*EOGL_TEXTURE_SLOTS), ibo(6*EOGL_TEXTURE_SLOTS)
+		: window(nullptr), shader("multiTexture"), 
+		vao(4*5*4*EOGL_TEXTURE_SLOTS, Layout({newLayer<float>(2), newLayer<float>(2), newLayer<int>(2)})),
+		ibo(6*EOGL_TEXTURE_SLOTS)
 	{
 		if(!isWindowManager)
 			throw std::runtime_error("WindowManager not initialized!");

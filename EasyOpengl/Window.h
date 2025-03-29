@@ -28,9 +28,9 @@ namespace eogl {
 		VertexArray vao;
 		IndexBuffer ibo;
 
-		void setAsCurrent() const;
 		void setEventCallbacks();
 	public:
+		void setAsCurrent() const;
 
 		Window(int width, int height, const std::string &title);
 		Window(const Monitor& monitor, bool isFullScreen, const std::string &title);

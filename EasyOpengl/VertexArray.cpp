@@ -2,65 +2,41 @@
 #include<GL/glew.h>
 #include<GLFW/glfw3.h>
 #include"Debug.h"
-#include"WindowManager.h"
+#include<stdexcept>
 
 namespace eogl{
-	VertexArray::VertexArray(unsigned int size, Layout layout, void* data ) :size(size)
-	{
-		GlCall(glGenVertexArrays(1, &vao));
-		GlCall(glBindVertexArray(vao));
-		
-		unsigned int buff;
-		GlCall(glGenBuffers(1, &buff));
-		GlCall(glBindBuffer(GL_ARRAY_BUFFER, buff));
-		GlCall(glBufferData(GL_ARRAY_BUFFER, size, data, GL_DYNAMIC_DRAW));
-		setLayout(layout);
+	VertexArray::VertexArray(unsigned int vboCount, Layout layout) : layout(layout), vbos(vboCount) {}
+	VertexArray::~VertexArray() {}
+	
+	void VertexArray::setVbo(unsigned int index, VertexBuffer* vbo) {
+		if (index >= vbos.size()) throw std::out_of_range("Index out of range in VertexArray::setVbo()");
+		vbos[index] = vbo;
 	}
-	VertexArray::VertexArray(int size) :size(size), layoutSize (-1)
-	{
-		if (size == -1) {
-			return;
-		}
-		GlCall(glGenVertexArrays(1, &vao));
-		GlCall(glBindVertexArray(vao));
-
-		unsigned int buff;
-		GlCall(glGenBuffers(1, &buff));
-		GlCall(glBindBuffer(GL_ARRAY_BUFFER, buff));
-		GlCall(glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_DYNAMIC_DRAW));
-	}
-
-	VertexArray::~VertexArray() 
-	{
-		if (size != -1)
-			glDeleteVertexArrays(1, &vao);
-	}
-	void VertexArray::bind() const
-	{
-		//glfwMakeContextCurrent(windowManager->getOffscreenContext());
-		GlCall(glBindVertexArray(vao));
-	}
-	void VertexArray::unBind() const {
-		glBindVertexArray(0);
-	}
-	void VertexArray::subData(unsigned int offset, unsigned int size, void* data) {
-		bind();
-		GlCall(glBufferSubData(GL_ARRAY_BUFFER, offset, size, data));
-	}
-
+	
 	void VertexArray::setLayout(Layout layout) {
-		auto layers = layout.getLayers();
-		int size = 0;
-		for (int i = 0; i < layers.size(); i++) {
-			size += layers[i].size;
+		this->layout = layout;
+	}
+	
+	void VertexArray::bind(Window& window) const {
+		window.setAsCurrent();
+		for(int i = 0; i < layout.layers.size(); i++){
+			glEnableVertexAttribArray(i);
+
+			if(vbos[layout.layers[i].bufferIndex] == nullptr) 
+				throw std::runtime_error("VertexBuffer not set in VertexArray::bind()");
+			vbos[layout.layers[i].bufferIndex]->bind();
+
+			glVertexAttribPointer(i, layout.layers[i].count, layout.layers[i].type, layout.layers[i].normalized, layout.layers[i].size, (void*)0);
+			glVertexAttribDivisor(i, layout.layers[i].divisor);
+
+			vbos[layout.layers[i].bufferIndex]->unBind();
 		}
-		layoutSize = size;
-		int size2 = 0;
-		bind();
-		for (int i = 0; i < layers.size(); i++) {
-			GlCall(glEnableVertexAttribArray(i));
-			GlCall(glVertexAttribPointer(i, layers[i].count, layers[i].type, layers[i].normalized, size, (void*)size2));
-			size2 += layers[i].size;
+	}
+	
+	void VertexArray::unBind(Window& window) const {
+		window.setAsCurrent();
+		for(int i = 0; i < layout.layers.size(); i++){
+			glDisableVertexAttribArray(i);
 		}
 	}
 }
