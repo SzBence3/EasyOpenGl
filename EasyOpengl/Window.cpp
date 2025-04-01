@@ -141,8 +141,12 @@ namespace eogl {
 	};
 
 	Window::Window(const int width, const int height, const std::string &title)
-		: window(nullptr), shader("multiTexture"), 
-		vao(4*5*4*EOGL_TEXTURE_SLOTS, Layout({newLayer<float>(2), newLayer<float>(2), newLayer<int>(2)})),
+		: window(nullptr),
+		shader("multiTexture"),
+		vbo(
+			sizeof(vertex) * 4 * EOGL_TEXTURE_SLOTS,
+			VertexBuffer::Layout({VertexBuffer::Layout::newLayer<float>(2, 0), VertexBuffer::Layout::newLayer<float>(2, 1), VertexBuffer::Layout::newLayer<int>(1, 2)})
+			),
 		ibo(6*EOGL_TEXTURE_SLOTS)
 	{
 		if (!isWindowManager)
@@ -167,8 +171,7 @@ namespace eogl {
 	}
 	
 	Window::Window(const Monitor& monitor, const bool isFullScreen, const std::string &title)
-		: window(nullptr), shader("multiTexture"), 
-		vao(4*5*4*EOGL_TEXTURE_SLOTS, Layout({newLayer<float>(2), newLayer<float>(2), newLayer<int>(2)})),
+		: window(nullptr), shader("multiTexture"),
 		ibo(6*EOGL_TEXTURE_SLOTS)
 	{
 		if(!isWindowManager)
@@ -200,6 +203,7 @@ namespace eogl {
 	}
 
 	Window::~Window() {
+		unBindVertexArray();
 		if (isWindowManager) {
 			windowManager->removeWindow(this);
 		}
@@ -223,7 +227,7 @@ namespace eogl {
 				
 			}
 			
-			vao.subData(0, vbo.size()*sizeof(vertex), vbo.data());
+
 			vao.bind();
 			this->ibo.bind();
 			shader.unBind();
@@ -276,4 +280,5 @@ namespace eogl {
 	void Window::removeAllSurfaces() {
 		surfaces.clear();
 	}
+
 }
