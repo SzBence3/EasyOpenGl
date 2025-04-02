@@ -22,6 +22,6 @@ namespace eogl {
 		unsigned int getVboCount() const { return vbos.size(); };
 		VertexBuffer* getVbo(const unsigned int index) const { return vbos[index]; };
 		void bind() const;
-		void unBind(Window& window) const;
+		void unBind() const;
 	};
 }

@@ -15,6 +15,8 @@ namespace eogl {
 		Monitor getIthMonitor(int i);
 		Window* getWindow(GLFWwindow* window);
 		inline GLFWwindow* getOffscreenContext() { return offscreen_context; }
+		void setBackgroundContextActive();
+		void setNoContext();
 	};
 	extern WindowManager* windowManager;
 }

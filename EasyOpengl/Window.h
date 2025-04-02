@@ -32,8 +32,8 @@ namespace eogl {
 		VertexArray const* boundVao = nullptr;
 
 		void setEventCallbacks();
-	public:
 		void setAsCurrent() const;
+	public:
 
 		Window(int width, int height, const std::string &title);
 		Window(const Monitor& monitor, bool isFullScreen, const std::string &title);

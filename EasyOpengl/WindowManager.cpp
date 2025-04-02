@@ -60,4 +60,8 @@ namespace eogl {
 		}
 		return nullptr;
 	}
+    void WindowManager::setBackgroundContextActive()
+    {
+		glfwMakeContextCurrent(offscreen_context);
+    }
 }

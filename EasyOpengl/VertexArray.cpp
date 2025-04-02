@@ -12,6 +12,11 @@ namespace eogl{
             vbo->bind();
         }
     }
+    void VertexArray::unBind() const{
+        for (auto& vbo : vbos) {
+            vbo->unBind();
+        }
+    }
 
 
 }
