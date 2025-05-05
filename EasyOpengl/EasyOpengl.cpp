@@ -36,7 +36,7 @@ int main()
 		return 0;
 		});
 
-	auto* image = new eogl::ImageSurface("res/textures/screenshot.png");
+	std::shared_ptr<eogl::ImageSurface> image(new eogl::ImageSurface("res/textures/screenshot.png"));
 	window->addSurface(image);
 
 	image->setSize({0.5f, 0.5f});
@@ -47,5 +47,4 @@ int main()
 		window->endFrame();
 	}
 	delete window;
-	delete image;
 }

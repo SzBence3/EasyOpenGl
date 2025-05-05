@@ -5,7 +5,7 @@
 
 namespace eogl {
 	bool isWindowManager = false;
-	WindowManager* windowManager = nullptr;
+	WindowManager* windowManager = nullptr;  
 
 	WindowManager::WindowManager() {
 		if (!isWindowManager) {

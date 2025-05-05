@@ -55,9 +55,9 @@ namespace eogl {
         [[nodiscard]] unsigned int getSize() const { return size; }
         void subData(unsigned int offset, unsigned int size, const void* data);
         void bind() const;
-        void VertexBuffer::unBind() const
+        void unBind() const
         {
-            layout.unBind();
+            layout.unBind(); // so it disconnets from the current vao
         }
     };
 }

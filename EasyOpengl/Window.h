@@ -6,13 +6,15 @@
 #include "EventCallback.h"
 #include "Surface.h"
 #include "IndexBuffer.h"
+#include "VertexArray.h"
 
-
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include<glm/glm.hpp>
 #include <string>
 #include<stdexcept>
 #include<vector>
+#include<memory>
 
 //EasyOpenGL namespace
 namespace eogl {
@@ -22,11 +24,11 @@ namespace eogl {
 		
 		GLFWwindow* window;
 		EventCallback* eventCallback[EOGL_EVENT_COUNT] = { nullptr };
-		std::vector<Surface*> surfaces;
+		std::vector<std::shared_ptr<Surface>> surfaces;
 
 		ShaderProgram shader;
 		VertexArray vao;
-		VertexBuffer vbo;
+		std::shared_ptr<VertexBuffer> vbo;
 		IndexBuffer ibo;
 
 		VertexArray const* boundVao = nullptr;
@@ -86,8 +88,8 @@ namespace eogl {
 		}
 		void pushEvent(int type, void* data) const;
 
-		void addSurface(Surface* surface, int index = -1);
-		void removeSurface(Surface* surface);
+		void addSurface(std::shared_ptr<Surface> surface, int index = -1);
+		void removeSurface(std::shared_ptr<Surface> surface);
 		void removeAllSurfaces();
 
 		void unBindVertexArray() {

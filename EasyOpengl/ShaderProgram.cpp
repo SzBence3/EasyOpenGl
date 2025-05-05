@@ -26,7 +26,8 @@ namespace eogl {
 			std::cout << "Shader failed to compile!" << std::endl
 				<< message << std::endl;
 			GlCall(glDeleteShader(s_id));
-			
+			throw std::invalid_argument("Shader failed to compile!");
+
 			return 0;
 		}
 

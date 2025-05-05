@@ -13,9 +13,17 @@
 #define EOGL_TEXTURE_SLOTS 16
 
 namespace eogl {
+
+	struct vertex{
+		glm::vec2 pos;
+		glm::vec2 texCoord;
+		float texIndex;
+	};
+
 	void Window::setEventCallbacks() {
 		setAsCurrent();
-		glfwSetKeyCallback(window, [](GLFWwindow* window, int key, int scancode, int action, int mods) {
+		{
+			glfwSetKeyCallback(window, [](GLFWwindow* window, int key, int scancode, int action, int mods) {
 				Window* win = windowManager->getWindow(window);
 				KeyEvent event(key, scancode, action, mods);
 				win->pushEvent(EOGL_KEY_EVENT, &event);
@@ -45,7 +53,7 @@ namespace eogl {
 			WindowResizeEvent event(glm::vec2(width, height));
 			win->pushEvent(EOGL_WINDOW_RESIZE_EVENT, &event);
 			});
-
+		}
 		if (!isWindowManager)
 			throw std::logic_error("WindowManager not initialized!");
 		windowManager->addWindow(this);
@@ -115,6 +123,7 @@ namespace eogl {
 			nullptr
 		);
 
+		//setting up ibo
 		std::vector<int> indices(6*EOGL_TEXTURE_SLOTS);
 		for(int i = 0; i < EOGL_TEXTURE_SLOTS; i++) {
 			indices[i*6] = 0+i*4;
@@ -125,28 +134,28 @@ namespace eogl {
 			indices[i*6+5] = 3+i*4;
 		}
 		ibo.subData(0, indices.size(), indices.data());
-
-		/*Layout layout;
-		layout.pushLayer<float>(2);
-		layout.pushLayer<float>(2);
-		layout.pushLayer<int>(1);
-
-		vao.setLayout(layout);*/
+		//setting up shader textur array
+		for(int i = 0; i < EOGL_TEXTURE_SLOTS; i++) {
+			shader.setUniform("textures[" + std::to_string(i) + "]", i);
+		}
+		
+		vbo = std::shared_ptr<VertexBuffer>(new VertexBuffer(
+			sizeof(vertex) * 4 * EOGL_TEXTURE_SLOTS,
+			VertexBuffer::Layout({
+				VertexBuffer::Layout::newLayer<float>(2, 0), 
+				VertexBuffer::Layout::newLayer<float>(2, 1), 
+				VertexBuffer::Layout::newLayer<float>(1, 2)
+			}))
+		);
+		vao.addVbo(vbo);
+		
 	}
+	
 
-	struct vertex{
-		glm::vec2 pos;
-		glm::vec2 texCoord;
-		int texIndex;
-	};
-
-	Window::Window(const int width, const int height, const std::string &title)
+	Window::Window(const int width, const int height, const std::string &title) 
 		: window(nullptr),
 		shader("multiTexture"),
-		vbo(
-			sizeof(vertex) * 4 * EOGL_TEXTURE_SLOTS,
-			VertexBuffer::Layout({VertexBuffer::Layout::newLayer<float>(2, 0), VertexBuffer::Layout::newLayer<float>(2, 1), VertexBuffer::Layout::newLayer<int>(1, 2)})
-			),
+		vao(),
 		ibo(6*EOGL_TEXTURE_SLOTS)
 	{
 		if (!isWindowManager)
@@ -171,7 +180,9 @@ namespace eogl {
 	}
 	
 	Window::Window(const Monitor& monitor, const bool isFullScreen, const std::string &title)
-		: window(nullptr), shader("multiTexture"),
+	: window(nullptr),
+		shader("multiTexture"),
+		vao(),
 		ibo(6*EOGL_TEXTURE_SLOTS)
 	{
 		if(!isWindowManager)
@@ -219,26 +230,27 @@ namespace eogl {
 			std::vector<int> ibo(6 * std::min(EOGL_TEXTURE_SLOTS, (int)surfaces.size() - i));
 			
 			for (int j = 0; j < std::min(EOGL_TEXTURE_SLOTS, (int)surfaces.size() - i); j++) {
-				vbo[j*4] = {surfaces[i + j]->getPos(getSize()), glm::vec2(0,0), j};
-				vbo[j*4+1] = {vbo[j*4].pos + glm::vec2(0.0f,surfaces[i + j]->getSize(getSize()).y), glm::vec2(0,1), j};
-				vbo[j*4+2] = {vbo[j*4].pos + surfaces[i + j]->getSize(getSize()), glm::vec2(1,1)};
-				vbo[j*4+3] = {vbo[j*4].pos + glm::vec2(surfaces[i + j]->getSize(getSize()).x,0.0f), glm::vec2(1,0), j};
+				vbo[j*4] = {surfaces[i + j]->getPos(getSize()), glm::vec2(0,0), float(j)};
+				vbo[j*4+1] = {vbo[j*4].pos + glm::vec2(0.0f,surfaces[i + j]->getSize(getSize()).y), glm::vec2(0,1), float(j)};
+				vbo[j*4+2] = {vbo[j*4].pos + surfaces[i + j]->getSize(getSize()), glm::vec2(1,1),float(j)};
+				vbo[j*4+3] = {vbo[j*4].pos + glm::vec2(surfaces[i + j]->getSize(getSize()).x,0.0f), glm::vec2(1,0), float(j)};
+				surfaces[i + j]->Render();
 				surfaces[i + j]->bindTexture(j);
-				
 			}
 			
-
+			setAsCurrent();
+			this->vbo->subData(0, sizeof(vertex) * vbo.size(), vbo.data());
 			vao.bind();
 			this->ibo.bind();
-			shader.unBind();
+			shader.bind();
 
-			setAsCurrent();
 
-			GlCall(glDrawElements(GL_TRIANGLES, ibo.size(), GL_UNSIGNED_INT, nullptr));
+			GlCall(glDrawElements(GL_TRIANGLES, std::min(EOGL_TEXTURE_SLOTS, (int)surfaces.size() - i), GL_UNSIGNED_INT, nullptr));
 		}
 		glClear(GL_COLOR_BUFFER_BIT);
 		glfwSwapBuffers(window);
 		glfwPollEvents();
+		windowManager->setBackgroundContextActive();
 	}
 	void Window::setClearColor(glm::vec4 color) const {
 		setAsCurrent();
@@ -263,7 +275,7 @@ namespace eogl {
 			eventCallback[type]->call((Event*)data);
 		}
 	}
-	void Window::addSurface(Surface* surface, int index) {
+	void Window::addSurface(std::shared_ptr<Surface> surface, int index) {
 		if (index == -1) {
 			surfaces.push_back(surface);
 		}
@@ -271,7 +283,7 @@ namespace eogl {
 			surfaces.insert(surfaces.begin() + index, surface);
 		}
 	}
-	void Window::removeSurface(Surface* surface) {
+	void Window::removeSurface(std::shared_ptr<Surface> surface) {
 		auto it = std::find(surfaces.begin(), surfaces.end(), surface);
 		if (it != surfaces.end()) {
 			surfaces.erase(it);

@@ -3,11 +3,11 @@
 in vec2 texCoord;
 in float TexIndex;
 
-uniform sampler2D texs[32];
+uniform sampler2D textures[32];
 
 out vec4 fragColor;
 
 void main()
 {
-    fragColor = texture(texs[int(TexIndex)], texCoord);
+    fragColor = texture(textures[int(TexIndex)], texCoord);
 }

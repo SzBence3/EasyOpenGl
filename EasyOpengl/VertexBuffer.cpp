@@ -58,7 +58,7 @@ namespace eogl{
     void VertexBuffer::bind() const
     {
         GlCall(glBindBuffer(GL_ARRAY_BUFFER, id));
-        layout.bind(divisor);
+        layout.bind(divisor); // bind the buffer to the current vao
         GlCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
     }
 }

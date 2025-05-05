@@ -6,9 +6,7 @@ namespace eogl {
 	Surface::Surface() {}
 	Surface::~Surface() {}
 
-	void Surface::Render() {
-		throw std::logic_error("Not implemented");
-	}
+	void Surface::Render() {}
 	void Surface::bindTexture(int index) {
 		throw std::logic_error("Not implemented");
 	}

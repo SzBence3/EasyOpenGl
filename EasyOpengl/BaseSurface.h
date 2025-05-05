@@ -15,6 +15,7 @@ namespace eogl {
 		BaseSurface();
 		~BaseSurface();
 		virtual void bindTexture(int index) override;
+		//from left down corner
 		virtual glm::vec2 getPos(glm::vec2 screenSize) override;
 		virtual glm::vec2 getSize(glm::vec2 screenSize) override;
 		virtual void setPos(glm::vec2 pos);
