@@ -11,6 +11,7 @@ namespace eogl
 
 	void _addObject() {
 		if (OBJECT_COUNT== 0) {
+			glewExperimental = GL_TRUE;
 			if (!glfwInit()) {
 				std::cout << "glfw error" << std::endl;
 				throw std::runtime_error("Error initializing GLFW!");

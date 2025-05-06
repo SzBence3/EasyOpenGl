@@ -25,4 +25,10 @@ target_include_directories(EasyOpengl PRIVATE
   "libs"
   "libs/glm-1.0.1")
 target_link_libraries(EasyOpengl glfw glew_s)
+
+file(COPY ${CMAKE_SOURCE_DIR}/shaders
+        DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/EasyOpengl)
+file(COPY ${CMAKE_SOURCE_DIR}/res
+        DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/EasyOpengl)
+
 #-opengl32

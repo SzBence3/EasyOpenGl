@@ -1,15 +1,20 @@
 #pragma once
 
+#include "VertexArray.h"
+#include "ShaderProgram.h"
+#include"Monitor.h"
+#include "EventCallback.h"
+#include "Surface.h"
+#include "IndexBuffer.h"
+#include "VertexArray.h"
+
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include<glm/glm.hpp>
 #include <string>
 #include<stdexcept>
 #include<vector>
-
-
-#include"Monitor.h"
-#include "EventCallback.h"
-#include "Surface.h"
+#include<memory>
 
 //EasyOpenGL namespace
 namespace eogl {
@@ -19,49 +24,59 @@ namespace eogl {
 		
 		GLFWwindow* window;
 		EventCallback* eventCallback[EOGL_EVENT_COUNT] = { nullptr };
-		std::vector<Surface*> surfaces;
+		std::vector<std::shared_ptr<Surface>> surfaces;
 
-		void setAsCurrent();
+		ShaderProgram shader;
+		VertexArray vao;
+		std::shared_ptr<VertexBuffer> vbo;
+		IndexBuffer ibo;
+
+		VertexArray const* boundVao = nullptr;
+
 		void setEventCallbacks();
+		void setAsCurrent() const;
 	public:
 
-		Window(int width, int height, std::string title);
-		Window(const Monitor& monitor, bool isFullScreen, std::string title);
+		Window(int width, int height, const std::string &title);
+		Window(const Monitor& monitor, bool isFullScreen, const std::string &title);
 		~Window();
 		void endFrame();
-		void setClearColor(glm::vec4 color);
-		inline glm::vec2 getSize() {
+
+		glm::vec2 getSize() const {
 			int width, height;
 			glfwGetWindowSize(window, &width, &height);
 			return glm::vec2(width, height);
 		}
-		inline bool shouldClose() {
+		bool shouldClose() const {
 			return glfwWindowShouldClose(window);
 		}
-		inline void setSize(int width, int height) {
+
+		void setClearColor(glm::vec4 color) const;
+		void setSize(const int width, const int height) const {
 			glfwSetWindowSize(window, width, height);
 		}
-		inline void setPosition(glm::vec2 pos) {
+		void setPosition(const glm::vec2 pos) {
 			glfwSetWindowPos(window, pos.x, pos.y);
 		}
-		inline void setWindowShouldClose(bool b = 1) {
+		void setWindowShouldClose(const bool b = true) {
 			glfwSetWindowShouldClose(window, b);
 		}
-		inline void setWindowTitle(const char* title) {
+		void setWindowTitle(const char* title) {
 			glfwSetWindowTitle(window, title);
 		}
-		inline glm::vec2 getCursorPos() {
+		void setFullScreen(bool b);
+
+		glm::vec2 getCursorPos() const {
 			double x, y;
 			glfwGetCursorPos(window, &x, &y);
 			return glm::vec2(x, y);
 		}
-		inline glm::vec2 getPosition() {
+		glm::vec2 getPosition() const {
 			int x, y;
 			glfwGetWindowPos(window, &x, &y);
 			return glm::vec2(x, y);
 		}
-		void setFullScreen(bool b);
-		template<class T> void setEventCallback(int type,const T& func) {
+		template<class T> void setEventCallback(const int type,const T& func) {
 			if (eventCallback[type]) {
 				delete eventCallback[type];
 				eventCallback[type] = nullptr; // Ensure it is set to nullptr after deletion
@@ -71,10 +86,28 @@ namespace eogl {
 				throw std::runtime_error("Error creating event callback!");
 			}
 		}
-		void pushEvent(int type, void* data);
-		void addSurface(Surface* surface, int index);
-		void removeSurface(Surface* surface);
+		void pushEvent(int type, void* data) const;
+
+		void addSurface(std::shared_ptr<Surface> surface, int index = -1);
+		void removeSurface(std::shared_ptr<Surface> surface);
 		void removeAllSurfaces();
+
+		void unBindVertexArray() {
+			if (boundVao) {
+
+				try{
+					boundVao->unBind();
+				}catch (...){} // it may occur if boundVao was deleted
+				boundVao = nullptr;
+			}
+		}
+		void bindVertexArray(const VertexArray& vao) {
+			setAsCurrent();
+			unBindVertexArray();
+			vao.bind();
+			boundVao = &vao;
+			setAsCurrent();
+		}
 	};
 
 }

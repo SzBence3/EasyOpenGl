@@ -1,8 +1,14 @@
 #pragma once
 #include<stdexcept>
+#include"config.h"
 
-#define ASSERT(x) if(!(x)) throw std::runtime_error("Assertion failed!")
+#ifndef EOGL_DEBUG
+    #define ASSERT(x) if(!(x)) throw std::runtime_error("Assertion failed!")
+#else
+    #define ASSERT(x) x
+#endif
 #define GlCall(x) GlClearError(); x; ASSERT(glCheckError())
+
 /*
 #define ASSERT(x) x
 #define GlCall(x) x; ASSERT(glCheckError())

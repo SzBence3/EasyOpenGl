@@ -5,24 +5,36 @@
 #include"glTypeConversion.h"
 
 namespace eogl {
-
-	struct Layer {
-		unsigned int size, count;
-		unsigned int type;
-		bool normalized;
-	};
-
-	class Layout {
-	private:
-		std::vector<Layer>layers;
+	class Layout{
+		class Layer{
+			friend class Layout;
+			unsigned char count;
+			unsigned short size;
+			bool normalized;
+			unsigned int divisor;
+			unsigned int type;
+			unsigned int bufferIndex;
+		};
+		std::vector<Layer> layers;
 	public:
-		Layout() {};
-		~Layout() {};
-		template<typename T>
-		void pushLayer(unsigned int count, bool normalized = 0) {
-			layers.push_back(Layer{ (unsigned int)sizeof(T) * count, count, getGlType<T>(), normalized});
-		}
-		const std::vector<Layer>& getLayers() const { return layers; };
-	};
+		Layout() = default;
+		Layout(const Layout &layout);
+		Layout(Layout &&layout) noexcept;
+		explicit Layout(const std::vector<Layer> &layers) : layers(layers){}
 
+		template<typename T>  void pushLayer(const int count, const unsigned int bufferIndex = 0, const int divisor = 0, const bool normalized = false) {
+			layers.push_back(newLayer<T>(count, bufferIndex, divisor, normalized));
+		}
+		
+		template<typename T>  static Layer newLayer(const int count, const unsigned int bufferIndex = 0, const unsigned int divisor = 0, const bool normalized = false) {
+			Layer layer{};
+			layer.count = count;
+			layer.divisor = divisor;
+			layer.normalized = normalized;
+			layer.size = count * sizeof(T);
+			layer.type = getGlType<T>();
+			layer.bufferIndex = bufferIndex;
+			return layer;
+		}
+	};
 }

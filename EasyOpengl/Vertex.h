@@ -2,7 +2,7 @@
 
 
 namespace eogl{
-    template <int posDCount = 3, int texDCount = 0, int normDCount = 0, int extraDCount1 = 0, int extraDCount2 = 0>
+    template <int posDCount = 3, int texDCount = 0, int normDCount = 0,int extraiDCount1 = 0, int extrafDCount1 = 0, int extrafDCount2 = 0>
     struct Vertex{
         #if posDCount > 0
         glm::vec<posDCount, float> pos;
@@ -13,10 +13,13 @@ namespace eogl{
         #if normDCount > 0
         glm::vec<normDCount, float> norm;
         #endif
-        #if extraDCount1 > 0
+        #if extraiDCount1 > 0
+        glm::vec<extraiDCount1, int> extra1;
+        #endif
+        #if extrafDCount1 > 0
         glm::vec<extraDCount1, float> extra1;
         #endif
-        #if extraDCount2 > 0
+        #if extrafDCount2 > 0
         glm::vec<extraDCount2, float> extra2;
         #endif
         Vertex(){
@@ -28,6 +31,9 @@ namespace eogl{
             #endif
             #if normDCount > 0
             norm = glm::vec<normDCount, float>(0);
+            #endif
+            #if extraiDCount1 > 0
+            extra1 = glm::vec<extraiDCount1, int>(0);
             #endif
             #if extraDCount1 > 0
             extra1 = glm::vec<extraDCount1, float>(0);

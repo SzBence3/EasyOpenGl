@@ -11,12 +11,18 @@ namespace eogl {
 		std::unordered_map<std::string, int>cache;
 		unsigned int compileShader(unsigned int type, std::string source);
 		int getUniformLocation(std::string name);
+		static std::unordered_map<std::string, ShaderProgram*>shaderCache;
+		static bool isDefaultShadersAdded;
 	public:
-		ShaderProgram(std::string vspath, std::string fspath);
+
+		static void addShaderPack(std::string name, std::string vspath, std::string fspath, std::string gspath, bool isPath);
+		static void addDefaultShaders();
+
+		ShaderProgram(std::string shaderPack);
 		ShaderProgram(std::string vspath, std::string fspath, bool isPath);
-		ShaderProgram(std::string vspath, std::string fspath, std::string gspath);
-		ShaderProgram(std::string vspath,std::string fspath, bool isPath, std::string gs);
-		void init(std::string vspath, std::string fspath, bool isPath, std::string gspath);
+		ShaderProgram(std::string vspath, std::string fspath, std::string gspath, bool isPath);
+
+		void init(std::string vspath, std::string fspath, std::string gspath, bool isPath);
 		~ShaderProgram();
 		void setUniform(const std::string name, float v1, float v2, float v3, float v4);
 		void setUniform(const std::string name, float v1, float v2, float v3);

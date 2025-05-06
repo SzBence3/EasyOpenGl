@@ -7,15 +7,19 @@ namespace eogl {
 	class BaseSurface : public Surface {
 	protected:
 		//left down corner and right up corner
-		glm::vec2 ld, ru;
+		glm::vec2 pos, size;
 		EventCallback* callbacks[EOGL_EVENT_COUNT];
 		bool input;
 	public:
-		BaseSurface(glm::vec2 ld, glm::vec2 rd, bool isInput);
+		BaseSurface(glm::vec2 pos, glm::vec2 size, bool isInput);
 		BaseSurface();
 		~BaseSurface();
 		virtual void bindTexture(int index) override;
-		virtual std::pair<glm::vec2, glm::vec2> getPosition(glm::vec2 screenSize) override;
+		//from left down corner
+		virtual glm::vec2 getPos(glm::vec2 screenSize) override;
+		virtual glm::vec2 getSize(glm::vec2 screenSize) override;
+		virtual void setPos(glm::vec2 pos);
+		virtual void setSize(glm::vec2 size);
 		virtual bool haveInput() override;
 		template<typename T> void setEventCallback(eventType type, T callback) {
 			callbacks[type] = createEventCallback(callback);
