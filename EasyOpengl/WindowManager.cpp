@@ -22,12 +22,15 @@ namespace eogl {
 		glfwMakeContextCurrent(offscreen_context);
 		_glewInit();
 		ShaderProgram::addDefaultShaders();
+		glGenVertexArrays(1,&localVao);
+		glBindVertexArray(localVao);
 	}
 
 	WindowManager::~WindowManager() {
 		for (auto window : windows) {
 			delete window;
 		}
+		glDeleteVertexArrays(1,&localVao);
 		_removeObject();
 		isWindowManager = false;
 	}

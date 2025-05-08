@@ -7,7 +7,7 @@
 #include "ImageSurface.h"
 #include "Texture.h"
 
-int main()
+int main0()
 {
 	eogl::WindowManager windowManager;
 	const eogl::Texture tex("res/textures/screenshot.png", true);

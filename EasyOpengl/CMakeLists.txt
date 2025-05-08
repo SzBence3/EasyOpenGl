@@ -24,7 +24,7 @@ add_executable (EasyOpengl EasyOpengl.cpp
 	config.h
 	Layout.h Layout.cpp
 	VertexBuffer.cpp VertexBuffer.h 
-	
+	Test.cpp
 )
 
  target_include_directories(EasyOpengl 

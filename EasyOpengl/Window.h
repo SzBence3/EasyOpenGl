@@ -33,6 +33,8 @@ namespace eogl {
 
 		VertexArray const* boundVao = nullptr;
 
+		uint localVao;
+
 		void setEventCallbacks();
 		void setAsCurrent() const;
 	public:

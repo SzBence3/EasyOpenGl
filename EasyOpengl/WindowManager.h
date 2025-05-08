@@ -6,6 +6,8 @@ namespace eogl {
 	class WindowManager{
 		std::vector<Window*>windows;
 		GLFWwindow* offscreen_context;
+		uint localVao;
+
 		public:
 		WindowManager();
 		~WindowManager();
