@@ -134,11 +134,13 @@ namespace eogl {
 			indices[i*6+5] = 3+i*4;
 		}
 		ibo.subData(0, indices.size(), indices.data());
+		
 		//setting up shader textur array
 		for(int i = 0; i < EOGL_TEXTURE_SLOTS; i++) {
 			shader.setUniform("textures[" + std::to_string(i) + "]", i);
 		}
 		
+		//setting up vertex buffer
 		vbo = std::shared_ptr<VertexBuffer>(new VertexBuffer(
 			sizeof(vertex) * 4 * EOGL_TEXTURE_SLOTS,
 			VertexBuffer::Layout({
@@ -148,7 +150,10 @@ namespace eogl {
 			}))
 		);
 		vao.addVbo(vbo);
-		
+
+		//an actual vao for the rendering here
+		glGenVertexArrays(1,&localVao);
+		glBindVertexArray(localVao);
 	}
 	
 
@@ -218,16 +223,19 @@ namespace eogl {
 		if (isWindowManager) {
 			windowManager->removeWindow(this);
 		}
+
+		glDeleteVertexArrays(1,&localVao);
+
 		glfwDestroyWindow(window);
 	}
 	
 	void Window::endFrame() {
 		glfwMakeContextCurrent(window);
-
+		shader.setUniform("trans", glm::mat4(1.0f));
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		for(int i = 0; i < surfaces.size(); i+= EOGL_TEXTURE_SLOTS) {
 
 			std::vector<vertex> vbo(4*std::min(EOGL_TEXTURE_SLOTS, (int)surfaces.size()-i));
-			std::vector<int> ibo(6 * std::min(EOGL_TEXTURE_SLOTS, (int)surfaces.size() - i));
 			
 			for (int j = 0; j < std::min(EOGL_TEXTURE_SLOTS, (int)surfaces.size() - i); j++) {
 				vbo[j*4] = {surfaces[i + j]->getPos(getSize()), glm::vec2(0,0), float(j)};
@@ -246,8 +254,9 @@ namespace eogl {
 
 
 			GlCall(glDrawElements(GL_TRIANGLES, std::min(EOGL_TEXTURE_SLOTS, (int)surfaces.size() - i), GL_UNSIGNED_INT, nullptr));
+
+			shader.unBind();
 		}
-		glClear(GL_COLOR_BUFFER_BIT);
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 		windowManager->setBackgroundContextActive();
